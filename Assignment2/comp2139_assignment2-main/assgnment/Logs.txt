@@ -1,0 +1,2 @@
+dotnet add package Serilog.AspNetCore
+dotnet add package Serilog.Sinks.File

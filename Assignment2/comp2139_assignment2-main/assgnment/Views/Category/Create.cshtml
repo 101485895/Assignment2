@@ -1,0 +1,33 @@
+﻿@model Category
+
+@{
+    ViewBag.Title = "Place Order";
+    Layout = "_Layout";
+}
+
+<h2>Place Order</h2>
+
+<form method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in ViewBag.Products)
+            {
+                <tr>
+                    <td><input type="checkbox" name="productIds" value="@product.Id" /></td>
+                    <td>@product.Name</td>
+                    <td>@product.Price</td>
+                    <td><input type="number" name="quantities" min="1" value="1" class="form-control" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-success">Submit Order</button>
+</form>

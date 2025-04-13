@@ -1,0 +1,33 @@
+@model List<Category>
+
+@{
+    ViewBag.Title = "Order Summary";
+    Layout = "_Layout";
+}
+
+<h2>Order Summary</h2>
+
+<p><strong>Order ID:</strong> @Model.Id</p>
+<p><strong>Order Date:</strong> @Model.OrderDate</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Total Price: @Model.TotalPrice</h3>
