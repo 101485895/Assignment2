@@ -1,0 +1,26 @@
+﻿@model Product
+
+@{
+    ViewBag.Title = "Product Details";
+    Layout = "_Layout";
+
+    bool isLowStock = Model.productQuantity < Model.stockThreshold;
+}
+
+<h2>@Model.productName</h2>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.productName</h4>
+        <p class="card-text"><strong>Description: </strong>@Model.productDescription</p>
+        <p class="card-text"><strong>Price: </strong>@Model.productPrice.ToString("C")</p>
+        <p class="card-text"><strong>Quantity: </strong>@Model.productQuantity</p>
+        <p class="card-text"><strong>Stock Threshold: </strong>@Model.stockThreshold</p>
+        <p class="card-text"><strong>Category: </strong>@Model.category.categoryName</p>
+        @if (isLowStock)
+        {
+            <div class="alert alert-warning">
+                Warning: Stock is below threshold! Please restock!
+            </div>
+        }
+    </div>
+</div>

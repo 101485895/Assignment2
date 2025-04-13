@@ -1,0 +1,90 @@
+﻿@using Microsoft.EntityFrameworkCore
+@model List<Product>
+
+@{
+    ViewBag.Title = "Products";
+    Layout = "_Layout";
+    bool searchPerformed = ViewBag.SearchPerformed as bool? ?? false;
+    string searchString = ViewBag.SearchString as string;
+}
+
+<!-- Combined Search Bar with Min and Max Price Filters -->
+<form id="searchForm" class="mb-3" onsubmit="return false;">
+    <div class="row">
+        <!-- Search Input -->
+        <div class="col-md-4">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search products..." />
+        </div>
+
+        <!-- Min Price Input -->
+        <div class="col-md-4">
+            <input type="number" step="0.01" id="minPrice" name="minPrice" class="form-control" placeholder="Min Price" />
+        </div>
+
+        <!-- Max Price Input -->
+        <div class="col-md-4">
+            <input type="number" step="0.01" id="maxPrice" name="maxPrice" class="form-control" placeholder="Max Price" />
+        </div>
+    </div>
+</form>
+
+<!-- Results Table -->
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>In Stock</th>
+    </tr>
+    </thead>
+    <tbody id="results"></tbody> <!-- This will hold the search results -->
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Load all products on page load
+        loadProducts();
+
+        // Live search and filter on input
+        $('#searchInput, #minPrice, #maxPrice').on('input', function () {
+            loadProducts();
+        });
+
+        function loadProducts() {
+            var query = $('#searchInput').val();
+            var minPrice = $('#minPrice').val();
+            var maxPrice = $('#maxPrice').val();
+
+            $.ajax({
+                url: '/Product/Search',
+                data: {
+                    searchString: query,
+                    minPrice: minPrice,
+                    maxPrice: maxPrice
+                },
+                method: 'GET',
+                success: function (data) {
+                    $('#results').empty();
+
+                    if (data.length > 0) {
+                        data.forEach(function (product) {
+                            $('#results').append(
+                                '<tr>' +
+                                '<td>' + product.productName + '</td>' +
+                                '<td>' + product.productDescription + '</td>' +
+                                '<td>$' + product.productPrice.toFixed(2) + '</td>' +
+                                '<td>' + product.productQuantity + '</td>' +
+                                '</tr>'
+                            );
+                        });
+                    } else {
+                        $('#results').append('<tr><td colspan="4">No products found</td></tr>');
+                    }
+                }
+            });
+        }
+    });
+</script>
